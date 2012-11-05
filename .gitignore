@@ -1,2 +1,3 @@
 *.o
+gmon.out
 dcpu16-c
