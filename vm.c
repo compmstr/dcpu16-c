@@ -43,16 +43,16 @@ void set_value(const vm_loc *loc, const unsigned short val){
 		return;
 	}
 	switch(loc->type){
-	case REGISTER:
+	case LOC_REGISTER:
 		registers[loc->reg] = val;
 		break;
-	case MEMORY:
+	case LOC_MEMORY:
 		mem_set(loc->loc, val);
 		break;
-	case REGISTER_MEMORY:
+	case LOC_REGISTER_MEMORY:
 		mem_set(registers[loc->reg], val);
 		break;
-	case REGISTER_MEMORY_OFFSET:
+	case LOC_REGISTER_MEMORY_OFFSET:
 		mem_set(registers[loc->reg] + loc->loc, val);
 		break;
 	case LOC_SP:
@@ -67,7 +67,17 @@ void set_value(const vm_loc *loc, const unsigned short val){
 	case LOC_IA:
 		IA = val;
 		break;
-	case LITERAL:
+	case LOC_PUSHPOP:
+		// Push
+		mem_set(--SP, val);
+		break;
+	case LOC_PEEK:
+		mem_set(SP, val);
+		break;
+	case LOC_PICK:
+		mem_set(SP + loc->loc, val);
+		break;
+	case LOC_LITERAL:
 		break;
 	}
 	//Fail silently otherwise
@@ -78,19 +88,19 @@ unsigned short get_value(const vm_loc *loc){
 		return 0;
 	}
 	switch(loc->type){
-	case REGISTER:
+	case LOC_REGISTER:
 		return registers[loc->reg];
 		break;
-	case MEMORY:
+	case LOC_MEMORY:
 		return mem_get(loc->loc);
 		break;
-	case REGISTER_MEMORY:
+	case LOC_REGISTER_MEMORY:
 		return mem_get(registers[loc->reg]);
 		break;
-	case REGISTER_MEMORY_OFFSET:
+	case LOC_REGISTER_MEMORY_OFFSET:
 		return mem_get(registers[loc->reg] + loc->loc);
 		break;
-	case LITERAL:
+	case LOC_LITERAL:
 		return loc->val;
 		break;
 	case LOC_SP:
@@ -105,6 +115,16 @@ unsigned short get_value(const vm_loc *loc){
 	case LOC_IA:
 		return IA;
 		break;
+	case LOC_PUSHPOP:
+		// Pop
+		return mem_get(SP++);
+		break;
+	case LOC_PICK:
+		return mem_get(loc->reg + SP);
+		break;
+	case LOC_PEEK:
+		return mem_get(SP);
+		break;
 	}
 	return 0;
 }
@@ -116,39 +136,31 @@ vm_loc code_word_value(unsigned short raw_val, const short b_val){
 	vm_loc ret;
 	//Register
 	if(raw_val <= 0x07){
-		ret.type = REGISTER;
+		ret.type = LOC_REGISTER;
 		ret.reg = raw_val;
 	}else if(raw_val <= 0x0f){
 	//[Register]
-		ret.type = REGISTER_MEMORY;
+		ret.type = LOC_REGISTER_MEMORY;
 		ret.reg = raw_val % 0x08;
 	} else if(raw_val <= 0x17){
 	//[Register + next word]
-		ret.type = REGISTER_MEMORY_OFFSET;
+		ret.type = LOC_REGISTER_MEMORY_OFFSET;
 		ret.reg = raw_val % 0x08;
 		ret.loc = get_next_word();
 	}
 	switch(raw_val){
 	//PUSH [--SP] if in b, or POP [SP++] if in a
 	case 0x18:
-		ret.type = MEMORY;
-		if(b_val){
-		//PUSH
-			ret.loc = --SP;
-		}else{
-		//POP
-			ret.loc = SP++;
-		}
+		ret.type = LOC_PUSHPOP;
 		break;
 	//PEEK [SP]
 	case 0x19:
-		ret.type = MEMORY;
-		ret.loc = SP;
+		ret.type = LOC_PEEK;
 		break;
 	//PICK [SP + next word]
 	case 0x1a:
-		ret.type = MEMORY;
-		ret.loc = SP + get_next_word();
+		ret.type = LOC_PICK;
+		ret.loc = get_next_word();
 		break;
 	//SP
 	case 0x1b:
@@ -164,17 +176,17 @@ vm_loc code_word_value(unsigned short raw_val, const short b_val){
 		break;
 	//[next word]
 	case 0x1e:
-		ret.type = MEMORY;
+		ret.type = LOC_MEMORY;
 		ret.loc = get_next_word();
 		break;
 	//next word (literal)
 	case 0x1f:
-		ret.type = LITERAL;
+		ret.type = LOC_LITERAL;
 		ret.val = get_next_word();
 	}
 	//literal value (a only)
 	if(!b_val && raw_val >= 0x20){
-		ret.type = LITERAL;
+		ret.type = LOC_LITERAL;
 		ret.val = raw_val - 0x20;
 	}
 
