@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include"vm.h"
+#include"parser.h"
 
 int main(int argc, char **argv){
   init_vm();
@@ -19,5 +20,17 @@ int main(int argc, char **argv){
 	vm_step();
 	printf("A: 0x%04X\n", registers[REG_A]);
 	vm_step();
+
+	printf("Loading test.dasm: \n");
+	open_input("test.dasm");
+	read_input_line();
+	printf("%s", input_file_stack->line_buffer);
+	read_input_line();
+	printf("%s", input_file_stack->line_buffer);
+	read_input_line();
+	printf("%s", input_file_stack->line_buffer);
+	read_input_line();
+	printf("%s", input_file_stack->line_buffer);
+	close_input();
   return 0;
 }

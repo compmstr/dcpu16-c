@@ -82,6 +82,9 @@ void set_value(const vm_loc *loc, const unsigned short val){
 		mem_set(SP + loc->loc, val);
 		break;
 	case LOC_LITERAL:
+	// These two shouldn't pop up in the vm
+	case LOC_LABEL:
+	case LOC_LABEL_MEM:
 		break;
 	}
 	//Fail silently otherwise
@@ -128,6 +131,10 @@ unsigned short get_value(const vm_loc *loc){
 		break;
 	case LOC_PEEK:
 		return mem_get(SP);
+		break;
+	// These two shouldn't pop up in the vm
+	case LOC_LABEL:
+	case LOC_LABEL_MEM:
 		break;
 	}
 	return 0;

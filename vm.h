@@ -2,29 +2,7 @@
 #define __VM_H__
 
 #include "codes.h"
-
-enum vm_loc_type {
-	LOC_REGISTER,
-	LOC_MEMORY,
-	LOC_REGISTER_MEMORY,
-	LOC_REGISTER_MEMORY_OFFSET,
-	LOC_PUSHPOP, 
-	LOC_PEEK,
-	LOC_PICK, 
-	LOC_LITERAL,
-	LOC_SP,
-	LOC_PC,
-	LOC_EX,
-	LOC_IA,
-};
-
-typedef struct vm_loc_t {
-	enum vm_loc_type type;
-	unsigned short loc;
-	unsigned short reg;
-	unsigned short val;
-}vm_loc;
-
+#include "types.h"
 
 extern unsigned short ram[0x10000];
 extern unsigned short registers[8];
@@ -32,7 +10,6 @@ extern unsigned short SP;
 extern unsigned short PC;
 extern unsigned short EX;
 extern unsigned short IA;
-
 
 void init_vm();
 unsigned short get_next_word();

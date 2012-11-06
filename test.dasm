@@ -1,0 +1,46 @@
+;call an interrupt
+IAS int-handler
+INT 0x08
+
+;use a variable
+JSR find-clock
+
+;turn on the clock
+SET A, 0
+SET B, 90 
+HWI [clock-hw]
+
+;turn on the screen
+JSR find-screen
+SET A, 0
+SET B, [screen-mem-loc]
+HWI [screen-hw]
+
+;Encode the character B
+SET A, 66
+JSR generate-char
+SET B, [screen-mem-loc]
+SET [B], A
+
+SET A, 67
+JSR generate-char
+SET B, [screen-mem-loc]
+ADD B, 1
+SET [B], A
+
+JSR tick-wait
+
+SET PC, end
+
+; interrupt handler
+:int-handler
+RFI 0
+
+#include util.dasm
+
+:screen-mem-loc
+dat 0xB800
+
+dat "Hello, world!"
+
+:end
