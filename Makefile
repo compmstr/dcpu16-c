@@ -17,4 +17,4 @@ types: types.h
 	echo 'processing types...'
 
 clean:
-	rm main.o vm.o dcpu16-c
+	rm main.o parser.o compiler.o vm.o dcpu16-c

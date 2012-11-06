@@ -12,7 +12,8 @@ bool is_whitespace(char c){
 	return FALSE;
 }
 void eat_whitespace(){
-	char *cur = input_file_stack + line_buffer_pos;
+	char *cur = input_file_stack->line_buffer + 
+              input_file_stack->line_buffer_pos;
 	while(is_whitespace(*cur)){
 		//TODO
 	}
