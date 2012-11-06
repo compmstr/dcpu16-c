@@ -37,6 +37,10 @@ unsigned short code_word_op(unsigned short word){
   //Bottom 5 bits
   return word & 0x1f;
 }
+unsigned short code_word_special_op(unsigned short word){
+	//Bits 5-10
+	return (word >> 5) & 0x1f;
+}
 
 void set_value(const vm_loc *loc, const unsigned short val){
 	if(loc == 0){
@@ -238,6 +242,12 @@ void vm_skip(){
 }
 
 void run_special_op(const unsigned short word){
+	switch(code_word_special_op(word)){
+	case SPECIAL_OP_JSR:
+		break;
+	default:
+		printf("Unsupported special op\n");
+	}
 }
 
 void run_op(const unsigned short word){
