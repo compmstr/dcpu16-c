@@ -68,11 +68,6 @@ typedef struct input_file_t{
 	struct input_file_t *next;
 }input_file;
 
-typedef struct token_t{
-	char *loc;
-	unsigned int size;
-}token;
-
 typedef unsigned char Uint8;
 typedef unsigned short Uint16;
 typedef unsigned int Uint32;

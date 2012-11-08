@@ -1,17 +1,9 @@
 #include<stdio.h>
 #include"vm.h"
-#include"parser.h"
+#include"compiler.h"
 
 int main(int argc, char **argv){
-  init_vm();
-  /*unsigned short word = get_next_word();
-	vm_loc a, b;
-	a = code_word_a(word);
-	b = code_word_b(word);
-  printf("Op: 0x%02X, A: 0x%02X, B: 0x%02X\n",
-				 code_word_op(word),
-				 get_value(&a),
-				 get_value(&b));*/
+  /*init_vm();
 	printf("A: 0x%04X\n", registers[REG_A]);
 	vm_step();
 	printf("A: 0x%04X\n", registers[REG_A]);
@@ -21,16 +13,36 @@ int main(int argc, char **argv){
 	printf("A: 0x%04X\n", registers[REG_A]);
 	vm_step();
 
+	char *cur_token = 0;
 	printf("Loading test.dasm: \n");
 	open_input("test.dasm");
 	read_input_line();
 	printf("%s", input_file_stack->line_buffer);
 	read_input_line();
 	printf("%s", input_file_stack->line_buffer);
+	cur_token = get_next_token();
+	printf("Token: %s\n", cur_token);
+	free(cur_token);
+	cur_token = get_next_token();
+	printf("Token: %s\n", cur_token);
+	free(cur_token);
 	read_input_line();
 	printf("%s", input_file_stack->line_buffer);
+
+	cur_token = get_next_token();
+	printf("Token: %s\n", cur_token);
+	free(cur_token);
+
+	cur_token = get_next_token();
+	printf("Token: %s\n", cur_token);
+	printf("Token int val: %d\n", get_string_as_number(cur_token));
+	free(cur_token);
+
 	read_input_line();
 	printf("%s", input_file_stack->line_buffer);
-	close_input();
+	close_input();*/
+
+	compile_file("test.dasm", "test.dbin");
+	
   return 0;
 }
