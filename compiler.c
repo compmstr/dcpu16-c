@@ -27,7 +27,7 @@ codelist_entry *process_line(){
 			return process_dat();
 		}else if(is_line_include()){
 			printf("Line is include\n");
-			open_input(get_include_filename());
+			open_input_m4(get_include_filename());
 			return NULL;
 		}else{
 			printf("Processing code line\n");
@@ -41,7 +41,7 @@ codelist_entry *process_line(){
 
 void compile_file(const char *src, const char *dest){
 	printf("Compiling file: %s into %s\n", src, dest);
-	open_input(src);
+	open_input_m4(src);
 
 	codelist_entry *entry;
 	while(is_input_open()){

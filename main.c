@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 
 	char *cur_token = 0;
 	printf("Loading test.dasm: \n");
-	open_input("test.dasm");
+	open_input_m4("test.dasm");
 	read_input_line();
 	printf("%s", input_file_stack->line_buffer);
 	read_input_line();

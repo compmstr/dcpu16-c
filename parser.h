@@ -14,6 +14,7 @@ extern input_file *input_file_stack;
 void eat_whitespace();
 char *parser_get_line();
 char *parser_get_orig_line();
+bool open_input_m4(const char* filename);
 bool open_input(const char* filename);
 void close_input();
 unsigned char is_input_open();

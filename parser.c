@@ -28,6 +28,26 @@ void eat_whitespace(){
 char *parser_get_orig_line(){
 	return input_file_stack->orig_line_buffer;
 }
+
+bool open_input_m4(const char* filename){
+	char m4_filename[256];
+
+	strncpy(m4_filename, "/tmp/", 10);
+	strncat(m4_filename, filename, strlen(filename));
+	strncat(m4_filename, ".m4", 10);
+
+	char m4_command[256];
+
+	strncpy(m4_command, "m4 ", 4);
+	strncat(m4_command, filename, strlen(filename));
+	strncat(m4_command, " > ", 10);
+	strncat(m4_command, m4_filename, strlen(m4_filename));
+
+	system(m4_command);
+
+	return open_input(m4_filename);
+}
+
 bool open_input(const char* filename){
 	printf("Opening file: %s\n", filename);
 	return push_input_file(filename);
@@ -113,7 +133,9 @@ bool is_digit(const char c, const int base){
 	}
 }
 bool is_square_bracketed(const char *str){
+	return 0;
 }
+
 /* remove one char from each end of the string */
 void remove_string_ends(char *str){
 }
