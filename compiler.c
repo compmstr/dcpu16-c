@@ -3,6 +3,7 @@
 #include "parser.h"
 
 codelist_entry *codelist = 0;
+code_label *labels = 0;
 
 codelist_entry *process_label(){
 	char *label_raw = get_next_token();
@@ -15,12 +16,9 @@ codelist_entry *process_label(){
 
 	free(label_raw);
 
-	codelist_entry *entry = calloc(sizeof(codelist_entry), 1);
-	entry->type = CODELISTENTRY_TYPE_LABEL;
-	entry->label = calloc(sizeof(code_label), 1);
-	entry->label->label_name = label_name;
-	// TODO: calculate actual loc
-	entry->label->loc = 0;
+	code_label *label = calloc(sizeof(code_label), 1);
+	label->label_name = label_name;
+	//TODO -- calculate and set label position
 	return NULL;
 }
 codelist_entry *process_dat(){
