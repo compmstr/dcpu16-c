@@ -9,7 +9,9 @@ bool push_input_file(const char* filename);
 void pop_input_file();
 
 bool is_whitespace(char c){
-	if(c == '\t' || c == ' ' || c == '\r' || c == '\n'){
+	if(c == '\t' || c == ' ' || c == '\r' ||
+		 c == '\n' || c == '\0' || c == '\v' ||
+		 c == '\f'){
 		return TRUE;
 	}
 	return FALSE;
@@ -118,6 +120,7 @@ char *get_next_token(){
 
 	char *token = calloc(size, sizeof(char));
 	strncpy(token, start, size);
+	token[size] = '\0';
 	return token;
 }
 
