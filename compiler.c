@@ -1,9 +1,49 @@
 #include"compiler.h"
 #include "types.h"
 #include "parser.h"
+#include "codelist_entry.h"
 
 codelist_entry *codelist = 0;
+codelist_entry *codelist_end = 0;
 code_label *labels = 0;
+
+void compile_cleanup(){
+	codelist_entry *cl = codelist;
+	codelist_entry *old = 0;
+	while(cl){
+		if(cl->aval){
+			free(cl->aval);
+		}
+		if(cl->bval){
+			free(cl->bval);
+		}
+		if(cl->label){
+			free(cl->label);
+		}
+		if(cl->data){
+			free(cl->data);
+		}
+		old = cl;
+		cl = cl->next;
+		free(old);
+	}
+	codelist = 0;
+	codelist_end = 0;
+	labels = 0;
+}
+void compile_init(){
+	compile_cleanup();
+}
+
+void add_codelist_entry(codelist_entry *new_entry){
+	if(codelist == 0){
+		//Empty, just set to the new one
+		codelist = codelist_end = new_entry;
+	}else{
+		codelist_end->next = new_entry;
+		codelist_end = new_entry;
+	}
+}
 
 codelist_entry *process_label(){
 	char *label_raw = get_next_token();
@@ -18,8 +58,10 @@ codelist_entry *process_label(){
 
 	code_label *label = calloc(sizeof(code_label), 1);
 	label->label_name = label_name;
-	//TODO -- calculate and set label position
-	return NULL;
+	codelist_entry *cl = calloc(sizeof(codelist_entry), 1);
+	cl->type = CODELIST_ENTRY_TYPE_LABEL;
+	cl->label = label;
+	return cl;
 }
 codelist_entry *process_dat(){
 	return NULL;
@@ -55,6 +97,8 @@ codelist_entry *process_line(){
 
 void compile_file(const char *src, const char *dest){
 	printf("Compiling file: %s into %s\n", src, dest);
+	printf("Initializing compiler...\n");
+	compile_init();
 	open_input_m4(src);
 
 	codelist_entry *entry;
@@ -62,11 +106,14 @@ void compile_file(const char *src, const char *dest){
 		while(read_input_line()){
 			entry = process_line();
 			if(entry != NULL){
+				printf("Adding codelist entry...\n");
+				add_codelist_entry(entry);
 			}
 		}
 		close_input();
 	}
 
 	close_input();
+	compile_cleanup();
 }
 

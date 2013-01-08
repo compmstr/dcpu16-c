@@ -20,11 +20,11 @@ enum vm_loc_type {
 	LOC_IA,
 };
 
-enum codelistentry_type {
-	CODELISTENTRY_TYPE_OP,
-	CODELISTENTRY_TYPE_SPECIAL_OP,
-	CODELISTENTRY_TYPE_LABEL,
-	CODELISTENTRY_TYPE_DATA,
+enum codelist_entry_type {
+	CODELIST_ENTRY_TYPE_OP,
+	CODELIST_ENTRY_TYPE_SPECIAL_OP,
+	CODELIST_ENTRY_TYPE_LABEL,
+	CODELIST_ENTRY_TYPE_DATA,
 };
 
 typedef struct vm_loc_t {
@@ -34,7 +34,7 @@ typedef struct vm_loc_t {
 	unsigned short val;
 }vm_loc;
 
-typedef struct tokenval_t{
+typedef struct token_val_t{
 	enum vm_loc_type type;
 	unsigned short reg;
 	unsigned short loc;
@@ -48,15 +48,16 @@ typedef struct code_label_t{
 	struct code_label_t *next;
 }code_label;
 
-typedef struct codelistentry_t {
-	enum codelistentry_type type;
+typedef struct codelist_entry_t {
+	enum codelist_entry_type type;
 	unsigned short op;
 	token_val *aval;
 	token_val *bval;
 	code_label *label;
 	unsigned short *data;
+	unsigned short *data_size;
 	unsigned short codeloc;
-	struct codelistentry_t *next;
+	struct codelist_entry_t *next;
 }codelist_entry ;
 
 typedef struct input_file_t{
