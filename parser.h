@@ -23,9 +23,16 @@ unsigned char is_input_open();
 **/
 bool read_input_line();
 char *get_next_token();
+/*Gets rest of current input line*/
+char *get_remaining_line();
+
+void ltrim(char *s);
+void rtrim(char *s);
+void trim(char *s);
 
 bool is_square_bracketed(const char *str);
 bool is_string_number(const char *str);
+bool is_quoted_string(const char *str);
 /* returns 10 or 16, based on if the string starts with 0x or not */
 int  get_string_number_base(const char *str);
 

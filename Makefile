@@ -20,5 +20,8 @@ codelist_entry.o: codelist_entry.h codelist_entry.c
 types: types.h
 	echo 'processing types...'
 
+test: test.c
+	$(CC) $(CFLAGS) -o test test.c
+
 clean:
-	rm -f main.o codelist_entry.o token_val.o parser.o compiler.o vm.o dcpu16-c
+	rm -f *.o dcpu16-c test

@@ -124,6 +124,40 @@ char *get_next_token(){
 	return token;
 }
 
+char *get_remaining_line(){
+	eat_whitespace();
+	char *start = input_file_stack->line_buffer + input_file_stack->line_buffer_pos;
+	int size = strlen(start);
+	char *out = calloc(size, sizeof(char));
+	strncpy(out, start, size);
+	out[size] = '\0';
+	return out;
+}
+
+void ltrim(char *s){
+	char *cpy = s;
+	int i = 0;
+
+	while(isspace(*cpy)){
+		cpy++;
+	}
+	while(cpy[i]){
+		s[i] = cpy[i];
+		i++;
+	}
+	s[i] = '\0';
+}
+void rtrim(char *s){
+	char *end = s + (strlen(s) - 1);
+	while(isspace(*end)){
+		*end-- = 0;
+	}
+}
+void trim(char *s){
+	rtrim(s);
+	ltrim(s);
+}
+
 bool is_digit(const char c, const int base){
 	char upper_c = toupper(c);
 	if((c >= '0' && c <= '9')
@@ -136,7 +170,8 @@ bool is_digit(const char c, const int base){
 	}
 }
 bool is_square_bracketed(const char *str){
-	return 0;
+	trim(str);
+	return (str[0] == '[') && (str[strlen(str) - 1] == ']');
 }
 
 /* remove one char from each end of the string */
