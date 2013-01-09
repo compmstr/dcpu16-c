@@ -1,3 +1,4 @@
+#include <math.h>
 #include"compiler.h"
 #include "types.h"
 #include "parser.h"
@@ -63,7 +64,63 @@ codelist_entry *process_label(){
 	cl->label = label;
 	return cl;
 }
+
+/*Gets up to 8 dat numbers from a string*/
+void get_data_from_nums(const char *str, codelist_entry *entry){
+	unsigned short *data = calloc(sizeof(short), 8);
+	int size = sscanf(str, "%i %i %i %i %i %i %i %i",
+										data, data + 1, data + 2, data + 3,
+										data + 4, data + 5, data + 6, data + 7);
+	if(size != 8 && size != 0){
+		data = realloc(data, sizeof(short) * size);
+	}
+	if(size == 0){
+		printf("Error when parsing numbers from DAT field\n");
+	}
+	entry->data = data;
+	entry->data_size = size;
+}
+void get_data_from_quoted_string(char *str, codelist_entry *entry){
+	remove_string_ends(str);
+	int len = strlen(str);
+	int size = ceil(len / 2.0f);
+	short *data = calloc(sizeof(short), size);
+	short tmp;
+	for(int i = 0; i < size; i++){
+		tmp = str[i * 2];
+		tmp += str[(i * 2) + 1] << 8;
+		data[i] = tmp;
+	}
+	entry->data = data;
+	entry->data_size = size;
+}
 codelist_entry *process_dat(){
+	char *orig_line = get_rest_of_orig_line();
+	int len = strlen(orig_line);
+	char *buf = calloc(len - 3, sizeof(char));
+	//Take off the DAT and following space
+	strncpy(buf, orig_line + 4, len - 3);
+	trim(buf);
+	printf("Dat: %s\n", buf);
+
+	codelist_entry *entry = calloc(sizeof(codelist_entry), 1);
+	if(is_quoted_string(buf)){
+		get_data_from_quoted_string(buf, entry);
+	}else{
+		get_data_from_nums(buf, entry);
+	}
+
+	printf("Data: ");
+	for(int i = 0; i < entry->data_size; i++){
+		printf("0x%04x ", entry->data[i]);
+	}
+	printf("\n");
+	for(int i = 0; i < entry->data_size; i++){
+		unsigned short cur = entry->data[i];
+		printf("%c%c", (cur >> 8), (cur & 0xFF));
+	}
+	printf("\n");
+
 	return NULL;
 }
 codelist_entry *process_op(){

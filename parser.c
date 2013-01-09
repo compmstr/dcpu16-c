@@ -170,12 +170,21 @@ bool is_digit(const char c, const int base){
 	}
 }
 bool is_square_bracketed(const char *str){
-	trim(str);
 	return (str[0] == '[') && (str[strlen(str) - 1] == ']');
+}
+
+bool is_quoted_string(const char *str){
+	return (str[0] == '"') && (str[strlen(str) - 1] == '"');
 }
 
 /* remove one char from each end of the string */
 void remove_string_ends(char *str){
+	char *cur = str + 1;
+	while(*cur){
+		*(cur - 1) = *cur;
+		cur++;
+	}
+	*(cur - 2) = 0;
 }
 bool is_string_number(const char *str){
 	int base = get_string_number_base(str);
@@ -200,7 +209,12 @@ int  get_string_number_base(const char *str){
 }
 
 int get_string_as_number(const char *str){
-	return (int)strtol(str, NULL, get_string_number_base(str));
+	int ret;
+	if(sscanf(str, "%i", &ret) == 1){
+		return ret;
+	}else{
+		return 0;
+	}
 }
 
 void str_to_upper(char *str){

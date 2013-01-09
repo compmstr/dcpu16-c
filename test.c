@@ -23,6 +23,15 @@ void rtrim(char *s){
 		*end-- = 0;
 	}
 }
+void remove_string_ends(char *str){
+	char *cur = str + 1;
+	while(*cur){
+		*(cur - 1) = *cur;
+		cur++;
+	}
+	*(cur - 2) = 0;
+}
+
 int main(int argc, char **argv){
 	//char *buf = 0;
 	//size_t buf_size;
@@ -45,6 +54,13 @@ int main(int argc, char **argv){
 	rtrim(s2);
 	printf("\"%s\"\n", s1);
 	printf("\"%s\"\n", s2);
+
+	char s3[] = "[hello]";
+	char s4[] = "hello there";
+	remove_string_ends(s3);
+	remove_string_ends(s4);
+	printf("\"%s\"\n", s3);
+	printf("\"%s\"\n", s4);
 
   return 0;
 }

@@ -29,6 +29,8 @@ char *get_remaining_line();
 void ltrim(char *s);
 void rtrim(char *s);
 void trim(char *s);
+/* remove one char from each end of the string */
+void remove_string_ends(char *str);
 
 bool is_square_bracketed(const char *str);
 bool is_string_number(const char *str);
