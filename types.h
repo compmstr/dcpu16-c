@@ -55,7 +55,7 @@ typedef struct codelist_entry_t {
 	token_val *bval;
 	code_label *label;
 	unsigned short *data;
-	unsigned short *data_size;
+	unsigned short data_size;
 	unsigned short codeloc;
 	struct codelist_entry_t *next;
 }codelist_entry ;

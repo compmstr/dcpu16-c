@@ -21,4 +21,4 @@ types: types.h
 	echo 'processing types...'
 
 clean:
-	rm main.o codelist_entry.o token_val.o parser.o compiler.o vm.o dcpu16-c
+	rm -f main.o codelist_entry.o token_val.o parser.o compiler.o vm.o dcpu16-c
