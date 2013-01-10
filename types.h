@@ -54,7 +54,7 @@ typedef struct codelist_entry_t {
 	token_val *aval;
 	token_val *bval;
 	code_label *label;
-	unsigned short *data;
+	int *data;
 	unsigned short data_size;
 	unsigned short codeloc;
 	struct codelist_entry_t *next;
@@ -73,5 +73,10 @@ typedef unsigned char Uint8;
 typedef unsigned short Uint16;
 typedef unsigned int Uint32;
 typedef Uint8 bool;
+
+typedef struct op_convert_entry_t{
+	char *name;
+	unsigned short code;
+}op_convert_entry;
 
 #endif

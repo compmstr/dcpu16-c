@@ -67,7 +67,7 @@ codelist_entry *process_label(){
 
 /*Gets up to 8 dat numbers from a string*/
 void get_data_from_nums(const char *str, codelist_entry *entry){
-	unsigned short *data = calloc(sizeof(short), 8);
+	int *data = calloc(sizeof(int), 8);
 	int size = sscanf(str, "%i %i %i %i %i %i %i %i",
 										data, data + 1, data + 2, data + 3,
 										data + 4, data + 5, data + 6, data + 7);
@@ -84,12 +84,12 @@ void get_data_from_quoted_string(char *str, codelist_entry *entry){
 	remove_string_ends(str);
 	int len = strlen(str);
 	int size = ceil(len / 2.0f);
-	short *data = calloc(sizeof(short), size);
-	short tmp;
+	int *data = calloc(sizeof(int), size);
+	int tmp;
 	for(int i = 0; i < size; i++){
 		tmp = str[i * 2];
 		tmp += str[(i * 2) + 1] << 8;
-		data[i] = tmp;
+		data[i] = (tmp & 0xFFFF);
 	}
 	entry->data = data;
 	entry->data_size = size;
@@ -121,7 +121,7 @@ codelist_entry *process_dat(){
 	}
 	printf("\n");
 
-	return NULL;
+	return entry;
 }
 codelist_entry *process_op(){
 	return NULL;
