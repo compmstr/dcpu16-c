@@ -2,7 +2,7 @@ CC=gcc
 #CFLAGS=-O3 -Wall `sdl-config --cflags`
 #CFLAGS=-std=c99 -Wall -ggdb -pg `sdl-config --cflags`
 CFLAGS=-std=c99 -Wall -ggdb `sdl-config --cflags`
-LIBS=-L/usr/X11/lib `sdl-config --libs`
+LIBS=-L/usr/X11/lib `sdl-config --libs` -lncurses
 
 dcpu16-c: src/main.c vm.o compiler.o encoder.o parser.o token_val.o codelist_entry.o types
 	$(CC) $(CFLAGS) -c src/main.c

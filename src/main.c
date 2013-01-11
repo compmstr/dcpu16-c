@@ -1,48 +1,65 @@
 #include<stdio.h>
+#include<curses.h>
+#include<string.h>
 #include"vm.h"
 #include"compiler.h"
+#include <unistd.h>
 
 int main(int argc, char **argv){
-  /*init_vm();
-	printf("A: 0x%04X\n", registers[REG_A]);
-	vm_step();
-	printf("A: 0x%04X\n", registers[REG_A]);
-	vm_step();
-	printf("[0x1000]: 0x%04X\n", mem_get(0x1000));
-	vm_step();
-	printf("A: 0x%04X\n", registers[REG_A]);
-	vm_step();
+	initscr();
+	cbreak();
+	noecho();
 
-	char *cur_token = 0;
-	printf("Loading test.dasm: \n");
-	open_input_m4("test.dasm");
-	read_input_line();
-	printf("%s", input_file_stack->line_buffer);
-	read_input_line();
-	printf("%s", input_file_stack->line_buffer);
-	cur_token = get_next_token();
-	printf("Token: %s\n", cur_token);
-	free(cur_token);
-	cur_token = get_next_token();
-	printf("Token: %s\n", cur_token);
-	free(cur_token);
-	read_input_line();
-	printf("%s", input_file_stack->line_buffer);
+	char input;
+	char buf1[256];
+	char buf2[256];
+	while(1){
+		clear();
+		printw("Menu:\n--------------\n1) Compile\n2) Run\nq) Exit\n----------\n> ");
+		input = getch();
+		if(input == '1'){
+			clear();
+			printw("Compiling: \n");
+			printw("Enter file to compile (test.dasm) : ");
 
-	cur_token = get_next_token();
-	printf("Token: %s\n", cur_token);
-	free(cur_token);
+			echo();
+			refresh();
+			getnstr(buf1, 255);
+			printw("Enter file to output (test.dbin) : ");
+			refresh();
+			getnstr(buf2, 255);
 
-	cur_token = get_next_token();
-	printf("Token: %s\n", cur_token);
-	printf("Token int val: %d\n", get_string_as_number(cur_token));
-	free(cur_token);
+			noecho();
 
-	read_input_line();
-	printf("%s", input_file_stack->line_buffer);
-	close_input();*/
+			if(strlen(buf1) == 0){
+				strncpy(buf1, "test.dasm", 100);
+			}
+			if(strlen(buf2) == 0){
+				strncpy(buf2, "test.dbin", 100);
+			}
 
-	compile_file("test.dasm", "test.dbin");
+			printw("Compiling %s to %s\n", buf1, buf2);
+			refresh();
+
+			printw("Press any key to continue");
+			refresh();
+			getch();
+		}
+		if(input == '2'){
+			clear();
+			printw("Running: \n");
+			refresh();
+			sleep(1);
+		}
+		if(input == 'q'){
+			clear();
+			printw("Exiting... \n");
+			refresh();
+			break;
+		}
+	}
+
+	endwin();
 	
   return 0;
 }

@@ -17,7 +17,7 @@ char *parser_get_orig_line();
 bool open_input_m4(const char* filename);
 bool open_input(const char* filename);
 void close_input();
-unsigned char is_input_open();
+bool is_input_open();
 /**
 	 Reads the next input line, returns true if not end of file
 **/

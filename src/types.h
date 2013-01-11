@@ -2,6 +2,11 @@
 #define __TYPES_H__
 
 #include <stdio.h>
+#include <stdbool.h>
+
+typedef unsigned char Uint8;
+typedef unsigned short Uint16;
+typedef unsigned int Uint32;
 
 enum vm_loc_type {
 	LOC_REGISTER,
@@ -69,14 +74,9 @@ typedef struct input_file_t{
 	struct input_file_t *next;
 }input_file;
 
-typedef unsigned char Uint8;
-typedef unsigned short Uint16;
-typedef unsigned int Uint32;
-typedef Uint8 bool;
-
 typedef struct op_convert_entry_t{
 	char *name;
-	unsigned short code;
+	Uint16 code;
 }op_convert_entry;
 
 #endif
